@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-7">
-      <div class="card p-4 mt-5">
+      <div class="card p-4 mt-5 border-0 shadow-3d">
         <div class="text-center mb-3">
           <h3 class="mb-0">Create your Travix account</h3>
           <small class="text-muted">Join to manage tours, bookings & events</small>
@@ -30,7 +30,7 @@
               <input type="password" name="password_confirmation" class="form-control" required>
             </div>
           </div>
-          <button class="btn btn-success w-100">Register</button>
+          <button class="btn btn-success w-100 btn-3d">Register</button>
           <div class="text-center mt-3">Already have an account? <a href="{{ route('login') }}">Login</a></div>
         </form>
       </div>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home'); // this is your dashboard Blade
     })->name('home');
+
+    // Flights search (UI stub): persists query then returns to flights section
+    Route::get('/flights/search', function (Request $request) {
+        // In a real app, call service/API and pass results to view.
+        // For now, just redirect to the flights section keeping the hash.
+        return redirect()->route('home', $request->all())->with('search', $request->all())->withFragment('flights');
+    })->name('flights.search');
+
+    // Hotels search (UI stub): persists query then returns to hotels section
+    Route::get('/hotels/search', function (Request $request) {
+        return redirect()->route('home', $request->all())->with('search', $request->all())->withFragment('hotels');
+    })->name('hotels.search');
 });

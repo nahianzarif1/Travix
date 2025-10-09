@@ -1,48 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex">
-    <!-- SIDEBAR -->
-    <aside id="appSidebar" class="d-flex flex-column p-4 text-white"
-           style="width:260px; min-height:100vh; position:fixed; background: linear-gradient(180deg,#003973,#00aaff);">
-        <a href="{{ url('/') }}" class="text-white text-decoration-none mb-4">
-            <div class="h4 fw-bold mb-0">TRAVIX</div>
-            <small class="text-white-50">Travel Management BD</small>
-        </a>
-
-        <nav class="nav flex-column mb-4" role="navigation" aria-label="Main navigation">
-            <a href="#" class="nav-link sidebar-link active text-white py-2" data-view="dashboard">Dashboard</a>
-            <a href="#" class="nav-link sidebar-link text-white py-2" data-view="flights">Flight Booking</a>
-            <a href="#" class="nav-link sidebar-link text-white py-2" data-view="hotels">Hotel Booking</a>
-            <a href="#" class="nav-link sidebar-link text-white py-2" data-view="packages">Tour Packages</a>
-            <a href="#" class="nav-link sidebar-link text-white py-2" data-view="map">Explore Map</a>
-            <a href="#" class="nav-link sidebar-link text-white py-2" data-view="bookings">My Bookings</a>
-        </nav>
-
-        <div class="mt-auto text-white-50 small">
-            © {{ date('Y') }} Travix
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main style="margin-left:260px; width:calc(100% - 260px); min-height:100vh;">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center bg-white border-bottom p-3 shadow-sm">
-            <div>
-                <h5 id="viewTitle" class="mb-0">Dashboard</h5>
-                <small class="text-muted">Welcome back, {{ auth()->user()->name ?? 'User' }}</small>
+<div>
+    <!-- TOP NAV -->
+    <div class="bg-white border-bottom shadow-sm topbar">
+        <div class="container-fluid d-flex align-items-center justify-content-between p-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="h5 fw-bold mb-0">TRAVIX</div>
+                <small class="text-muted">Travel Management BD</small>
             </div>
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="#" class="nav-link sidebar-link active" data-view="dashboard">Dashboard</a>
+                <a href="#" class="nav-link sidebar-link" data-view="flights">Flights</a>
+                <a href="#" class="nav-link sidebar-link" data-view="hotels">Hotels</a>
+                <a href="#" class="nav-link sidebar-link" data-view="packages">Packages</a>
+                <a href="#" class="nav-link sidebar-link" data-view="map">Map</a>
+                <a href="#" class="nav-link sidebar-link" data-view="bookings">Bookings</a>
+                <a href="#" class="nav-link sidebar-link" data-view="payments">Payments</a>
+            </nav>
             <div class="d-flex align-items-center gap-2">
-                <span class="text-muted me-2 d-none d-md-inline">Signed in as: <strong>{{ auth()->user()->name ?? 'Guest' }}</strong></span>
+                <span class="text-muted d-none d-md-inline">Signed in as: <strong>{{ auth()->user()->name ?? 'Guest' }}</strong></span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="btn btn-outline-danger btn-sm">Logout</button>
                 </form>
             </div>
         </div>
+    </div>
 
-        <!-- Content area -->
-        <div class="p-4">
+    <!-- Page header under nav -->
+    <div class="container-fluid d-flex justify-content-between align-items-center p-3">
+        <div>
+            <h5 id="viewTitle" class="mb-0">Dashboard</h5>
+            <small class="text-muted">Welcome back, {{ auth()->user()->name ?? 'User' }}</small>
+        </div>
+    </div>
+
+    <!-- Content area -->
+    <div class="p-4">
             <!-- Dashboard overview (default) -->
             <div id="section-dashboard" class="dashboard-section">
                 @include('dashboard.sections.overview')
@@ -72,8 +67,13 @@
             <div id="section-bookings" class="dashboard-section" style="display:none;">
                 @include('dashboard.sections.bookings')
             </div>
+
+            <!-- Payments -->
+            <div id="section-payments" class="dashboard-section" style="display:none;">
+                @include('dashboard.sections.payments')
+            </div>
         </div>
-    </main>
+    </div>
 </div>
 
 <!-- Inline JS to switch views (client-side, like your React activeView logic) -->
@@ -101,6 +101,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // update url hash for bookmarking/back
         history.replaceState(null, '', '#' + view);
+
+        // notify sections about view changes (needed for Leaflet sizing)
+        try {
+            window.dispatchEvent(new CustomEvent('travix:view', { detail: { view } }));
+            if (view === 'map') {
+                // defer to allow layout to paint before sizing map
+                setTimeout(() => window.dispatchEvent(new Event('travix:map:show')), 50);
+            }
+        } catch (e) {}
     }
 
     // click handlers
@@ -118,3 +127,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
+
+
