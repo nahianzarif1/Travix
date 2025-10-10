@@ -25,7 +25,7 @@
         <small class="text-muted">Total Bookings</small>
         <div class="h3 fw-bold mt-2">
           @php
-            $totalBookings = \Illuminate\Support\Facades\Schema::hasTable('bookings') ? \DB::table('bookings')->count() : 0;
+            $totalBookings = \App\Models\Booking::count();
           @endphp
           {{ $totalBookings }}
         </div>
@@ -37,9 +37,7 @@
         <small class="text-muted">My Bookings</small>
         <div class="h3 fw-bold mt-2">
           @php
-            $myBookings = \Illuminate\Support\Facades\Schema::hasTable('bookings') && auth()->check()
-                          ? \DB::table('bookings')->where('user_id', auth()->id())->count()
-                          : 0;
+            $myBookings = \App\Models\Booking::where('user_id', auth()->id())->count();
           @endphp
           {{ $myBookings }}
         </div>
@@ -51,7 +49,7 @@
         <small class="text-muted">Packages</small>
         <div class="h3 fw-bold mt-2">
           @php
-            $packagesCount = \Illuminate\Support\Facades\Schema::hasTable('packages') ? \DB::table('packages')->count() : 0;
+            $packagesCount = \App\Models\Package::count();
           @endphp
           {{ $packagesCount }}
         </div>

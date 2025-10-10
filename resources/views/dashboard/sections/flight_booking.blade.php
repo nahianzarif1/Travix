@@ -83,40 +83,43 @@
             </div>
 
             <div class="vstack gap-3">
-            @foreach([
-                ['id'=>1,'airline'=>'Biman Bangladesh Airlines','from'=>'DAC','to'=>'CXB','departure'=>'08:30','arrival'=>'09:45','duration'=>'1h 15m','price'=>8500,'rating'=>4.2,'aircraft'=>'Boeing 737','amenities'=>['Wifi','Meal','Entertainment']],
-                ['id'=>2,'airline'=>'US-Bangla Airlines','from'=>'DAC','to'=>'CXB','departure'=>'14:15','arrival'=>'15:30','duration'=>'1h 15m','price'=>7800,'rating'=>4.0,'aircraft'=>'ATR 72','amenities'=>['Meal','Entertainment']],
-                ['id'=>3,'airline'=>'NovoAir','from'=>'DAC','to'=>'CXB','departure'=>'18:00','arrival'=>'19:15','duration'=>'1h 15m','price'=>9200,'rating'=>4.4,'aircraft'=>'Embraer E145','amenities'=>['Wifi','Meal','Priority Boarding']],
-                ['id'=>4,'airline'=>'Regent Airways','from'=>'DAC','to'=>'CGP','departure'=>'12:30','arrival'=>'13:30','duration'=>'1h 00m','price'=>6500,'rating'=>3.8,'aircraft'=>'Dash 8','amenities'=>['Meal']],
-            ] as $flight)
+            @php
+                $flights = session('search_results') ?? \App\Models\Flight::all();
+            @endphp
+            @foreach($flights as $flight)
                 <div class="border rounded-3 p-3 hover-bg-soft">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                         <div class="d-flex align-items-center gap-3">
                             <div class="d-flex align-items-center justify-content-center rounded-3" style="width:48px;height:48px;background:#e9f3ff;">✈️</div>
                             <div>
-                                <div class="fw-semibold">{{ $flight['airline'] }}</div>
-                                <div class="text-muted small">{{ $flight['aircraft'] }}</div>
+                                <div class="fw-semibold">{{ $flight->airline }}</div>
+                                <div class="text-muted small">{{ $flight->aircraft }}</div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-4 flex-grow-1 justify-content-center">
                             <div class="text-center">
-                                <div class="fw-medium">{{ $flight['departure'] }}</div>
-                                <div class="text-muted small">{{ $flight['from'] }}</div>
+                                <div class="fw-medium">{{ $flight->departure }}</div>
+                                <div class="text-muted small">{{ $flight->from_city }}</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-muted small">{{ $flight['duration'] }}</div>
+                                <div class="text-muted small">{{ $flight->duration }}</div>
                                 <div class="my-1 border-top" style="border-style:dashed !important;"></div>
                                 <div class="text-muted small">Non-stop</div>
                             </div>
                             <div class="text-center">
-                                <div class="fw-medium">{{ $flight['arrival'] }}</div>
-                                <div class="text-muted small">{{ $flight['to'] }}</div>
+                                <div class="fw-medium">{{ $flight->arrival }}</div>
+                                <div class="text-muted small">{{ $flight->to_city }}</div>
                             </div>
                         </div>
                         <div class="text-end">
-                            <div class="fs-5 fw-bold text-success">৳{{ number_format($flight['price']) }}</div>
+                            <div class="fs-5 fw-bold text-success">৳{{ number_format($flight->price) }}</div>
                             <div class="text-muted small mb-2">per person</div>
-                            <button class="btn btn-success btn-sm">Select Flight</button>
+                            <form method="POST" action="{{ route('bookings.flight') }}" class="d-inline">
+                                @csrf
+                                <input type="hidden" name="flight_id" value="{{ $flight->id }}">
+                                <input type="hidden" name="passengers" value="1">
+                                <button type="submit" class="btn btn-success btn-sm">Book Flight</button>
+                            </form>
                         </div>
                     </div>
                 </div>

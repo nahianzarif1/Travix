@@ -86,71 +86,49 @@
 
             <div class="row g-4">
                 @php
-                    $packages = [
-                        [
-                            'title' => "Cox's Bazar Beach Paradise",
-                            'location' => 'Cox\'s Bazar',
-                            'duration' => '3 Days 2 Nights',
-                            'price' => 15000,
-                            'originalPrice' => 18000,
-                            'rating' => 4.7,
-                            'reviews' => 245,
-                            'image' => 'https://images.unsplash.com/photo-1658076798013-654fb97e3111?auto=format&fit=crop&w=1080&q=80',
-                            'category' => 'Beach',
-                            'highlights' => ['Longest Beach', 'Sunset Point', 'Marine Drive'],
-                            'includes' => ['Hotel', 'Meals', 'Transport', 'Guide'],
-                            'groupSize' => '2-15 people'
-                        ],
-                        [
-                            'title' => 'Sylhet Tea Garden Retreat',
-                            'location' => 'Sylhet',
-                            'duration' => '2 Days 1 Night',
-                            'price' => 12000,
-                            'originalPrice' => 15000,
-                            'rating' => 4.5,
-                            'reviews' => 156,
-                            'image' => 'https://images.unsplash.com/photo-1667120205301-a2a3a886886e?auto=format&fit=crop&w=1080&q=80',
-                            'category' => 'Nature',
-                            'highlights' => ['Tea Gardens', 'Jaflong', 'Hill Views'],
-                            'includes' => ['Hotel', 'Breakfast', 'Transport', 'Tea Tasting'],
-                            'groupSize' => '2-10 people'
-                        ],
-                    ];
+                    $packages = \App\Models\Package::all();
                 @endphp
 
                 @foreach ($packages as $pkg)
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="border rounded-3 overflow-hidden hover-bg-soft">
                         <div class="position-relative">
-                            <img src="{{ $pkg['image'] }}" alt="{{ $pkg['title'] }}" class="w-100" style="height:190px;object-fit:cover;">
-                            <span class="badge bg-secondary position-absolute top-0 start-0 m-2">{{ $pkg['category'] }}</span>
+                            <img src="{{ $pkg->image }}" alt="{{ $pkg->title }}" class="w-100" style="height:190px;object-fit:cover;">
+                            <span class="badge bg-secondary position-absolute top-0 start-0 m-2">{{ $pkg->category }}</span>
                         </div>
                         <div class="p-3">
-                            <div class="fw-semibold mb-1">{{ $pkg['title'] }}</div>
+                            <div class="fw-semibold mb-1">{{ $pkg->title }}</div>
                             <div class="d-flex align-items-center gap-3 text-muted small mb-2">
-                                <span class="d-flex align-items-center gap-1"><i class="bi bi-geo-alt"></i> {{ $pkg['location'] }}</span>
-                                <span class="d-flex align-items-center gap-1"><i class="bi bi-clock"></i> {{ $pkg['duration'] }}</span>
+                                <span class="d-flex align-items-center gap-1"><i class="bi bi-geo-alt"></i> {{ $pkg->location }}</span>
+                                <span class="d-flex align-items-center gap-1"><i class="bi bi-clock"></i> {{ $pkg->duration }}</span>
                             </div>
-                            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-star-fill text-warning"></i> {{ $pkg['rating'] }} <span class="text-muted small">({{ $pkg['reviews'] }})</span></div>
+                            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-star-fill text-warning"></i> {{ $pkg->rating }} <span class="text-muted small">({{ $pkg->reviews }})</span></div>
                             <div class="mb-2">
                                 <strong class="small">Highlights:</strong>
-                                @foreach($pkg['highlights'] as $h)
+                                @foreach($pkg->highlights as $h)
                                     <span class="badge bg-light text-dark border me-1">{{ $h }}</span>
                                 @endforeach
                             </div>
                             <div class="mb-2">
                                 <strong class="small">Includes:</strong>
-                                @foreach($pkg['includes'] as $i)
+                                @foreach($pkg->includes as $i)
                                     <span class="badge bg-success-subtle text-success-emphasis me-1">{{ $i }}</span>
                                 @endforeach
                             </div>
-                            <div class="text-muted small mb-2"><i class="bi bi-people"></i> {{ $pkg['groupSize'] }}</div>
+                            <div class="text-muted small mb-2"><i class="bi bi-people"></i> {{ $pkg->group_size }}</div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <span class="fw-bold text-success">৳{{ number_format($pkg['price']) }}</span>
-                                    <span class="text-muted text-decoration-line-through small">৳{{ number_format($pkg['originalPrice']) }}</span>
+                                    <span class="fw-bold text-success">৳{{ number_format($pkg->price) }}</span>
+                                    @if($pkg->original_price)
+                                        <span class="text-muted text-decoration-line-through small">৳{{ number_format($pkg->original_price) }}</span>
+                                    @endif
                                 </div>
-                                <button class="btn btn-success btn-sm">Book</button>
+                                <form method="POST" action="{{ route('bookings.package') }}" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="package_id" value="{{ $pkg->id }}">
+                                    <input type="hidden" name="participants" value="2">
+                                    <button type="submit" class="btn btn-success btn-sm">Book</button>
+                                </form>
                             </div>
                         </div>
                     </div>

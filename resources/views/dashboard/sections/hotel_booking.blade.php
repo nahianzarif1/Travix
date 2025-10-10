@@ -53,69 +53,48 @@
             </div>
             <div class="vstack gap-4">
                 @php
-                    $hotels = [
-                        [
-                            'id' => 1,
-                            'name' => 'Pan Pacific Sonargaon Dhaka',
-                            'location' => 'Dhaka',
-                            'image' => 'https://images.unsplash.com/photo-1613508999265-2acab7209645?q=80&w=1080',
-                            'rating' => 4.8,
-                            'reviews' => 2340,
-                            'price' => 15000,
-                            'amenities' => ['Wifi', 'Pool', 'Spa', 'Restaurant', 'Gym', 'Parking'],
-                            'category' => '5-Star',
-                            'description' => 'Luxury hotel in the heart of Dhaka with world-class amenities',
-                            'featured' => true
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => "Sea Palace Hotel & Resort",
-                            'location' => "Cox's Bazar",
-                            'image' => 'https://images.unsplash.com/photo-1658076798013-654fb97e3111?q=80&w=1080',
-                            'rating' => 4.6,
-                            'reviews' => 1820,
-                            'price' => 8500,
-                            'amenities' => ['Wifi', 'Beach Access', 'Restaurant', 'Spa', 'Pool'],
-                            'category' => '4-Star',
-                            'description' => 'Beachfront resort with stunning ocean views',
-                            'featured' => true
-                        ],
-                    ];
+                    $hotels = session('search_results') ?? \App\Models\Hotel::all();
                 @endphp
                 @foreach($hotels as $hotel)
                     <div class="border rounded-3 p-3 hover-bg-soft">
                         <div class="d-flex align-items-start gap-3 flex-wrap">
                             <div class="position-relative">
-                                <img src="{{ $hotel['image'] }}" alt="{{ $hotel['name'] }}" class="rounded-3" style="width:180px;height:120px;object-fit:cover;">
+                                <img src="{{ $hotel->image }}" alt="{{ $hotel->name }}" class="rounded-3" style="width:180px;height:120px;object-fit:cover;">
                                 <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle"><i class="bi bi-heart"></i></button>
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div>
-                                        <h6 class="fw-semibold mb-0">{{ $hotel['name'] }}</h6>
-                                        <small class="text-muted d-flex align-items-center gap-2"><i class="bi bi-geo-alt"></i> {{ $hotel['location'] }} <span class="badge bg-light text-dark">{{ $hotel['category'] }}</span></small>
+                                        <h6 class="fw-semibold mb-0">{{ $hotel->name }}</h6>
+                                        <small class="text-muted d-flex align-items-center gap-2"><i class="bi bi-geo-alt"></i> {{ $hotel->location }} <span class="badge bg-light text-dark">{{ $hotel->category }}</span></small>
                                     </div>
                                     <div class="text-end">
-                                        <div class="fw-bold fs-5 text-success">৳{{ number_format($hotel['price']) }}</div>
+                                        <div class="fw-bold fs-5 text-success">৳{{ number_format($hotel->price) }}</div>
                                         <small class="text-muted">per night</small>
                                     </div>
                                 </div>
-                                <p class="text-muted small mb-2">{{ $hotel['description'] }}</p>
+                                <p class="text-muted small mb-2">{{ $hotel->description }}</p>
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="bi bi-star-fill text-warning me-1"></i>
-                                    <span class="fw-medium">{{ $hotel['rating'] }}</span>
-                                    <small class="text-muted ms-1">({{ $hotel['reviews'] }} reviews)</small>
+                                    <span class="fw-medium">{{ $hotel->rating }}</span>
+                                    <small class="text-muted ms-1">({{ $hotel->reviews }} reviews)</small>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="small text-muted d-flex flex-wrap gap-2">
-                                        @foreach(array_slice($hotel['amenities'], 0, 5) as $a)
+                                        @foreach(array_slice($hotel->amenities, 0, 5) as $a)
                                             <span class="badge bg-light text-dark">{{ $a }}</span>
                                         @endforeach
-                                        @if(count($hotel['amenities']) > 5)
-                                            <span class="text-muted small">+{{ count($hotel['amenities']) - 5 }} more</span>
+                                        @if(count($hotel->amenities) > 5)
+                                            <span class="text-muted small">+{{ count($hotel->amenities) - 5 }} more</span>
                                         @endif
                                     </div>
-                                    <button class="btn btn-success btn-sm">Book Now</button>
+                                    <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
+                                        @csrf
+                                        <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+                                        <input type="hidden" name="guests" value="2">
+                                        <input type="hidden" name="rooms" value="1">
+                                        <button type="submit" class="btn btn-success btn-sm">Book Now</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -133,19 +112,25 @@
                     <div class="col-md-4">
                         <div class="border rounded-3 overflow-hidden hover-bg-soft">
                             <div class="position-relative">
-                                <img src="{{ $hotel['image'] }}" class="w-100" style="height:200px;object-fit:cover;" alt="{{ $hotel['name'] }}">
-                                <span class="badge bg-light text-dark position-absolute top-0 start-0 m-2">{{ $hotel['category'] }}</span>
+                                <img src="{{ $hotel->image }}" class="w-100" style="height:200px;object-fit:cover;" alt="{{ $hotel->name }}">
+                                <span class="badge bg-light text-dark position-absolute top-0 start-0 m-2">{{ $hotel->category }}</span>
                             </div>
                             <div class="p-3">
-                                <h6 class="fw-semibold mb-1">{{ $hotel['name'] }}</h6>
-                                <div class="text-muted small mb-1"><i class="bi bi-geo-alt"></i> {{ $hotel['location'] }}</div>
-                                <div class="text-warning small mb-2"><i class="bi bi-star-fill"></i> {{ $hotel['rating'] }} ({{ $hotel['reviews'] }})</div>
+                                <h6 class="fw-semibold mb-1">{{ $hotel->name }}</h6>
+                                <div class="text-muted small mb-1"><i class="bi bi-geo-alt"></i> {{ $hotel->location }}</div>
+                                <div class="text-warning small mb-2"><i class="bi bi-star-fill"></i> {{ $hotel->rating }} ({{ $hotel->reviews }})</div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <div class="fw-bold text-success">৳{{ number_format($hotel['price']) }}</div>
+                                        <div class="fw-bold text-success">৳{{ number_format($hotel->price) }}</div>
                                         <small class="text-muted">per night</small>
                                     </div>
-                                    <button class="btn btn-sm btn-success">Book</button>
+                                    <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
+                                        @csrf
+                                        <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+                                        <input type="hidden" name="guests" value="2">
+                                        <input type="hidden" name="rooms" value="1">
+                                        <button type="submit" class="btn btn-sm btn-success">Book</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

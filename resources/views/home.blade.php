@@ -17,6 +17,7 @@
                 <a href="#" class="nav-link sidebar-link" data-view="map">Map</a>
                 <a href="#" class="nav-link sidebar-link" data-view="bookings">Bookings</a>
                 <a href="#" class="nav-link sidebar-link" data-view="payments">Payments</a>
+                <a href="{{ route('payment.history') }}" class="nav-link sidebar-link">Payment History</a>
             </nav>
             <div class="d-flex align-items-center gap-2">
                 <span class="text-muted d-none d-md-inline">Signed in as: <strong>{{ auth()->user()->name ?? 'Guest' }}</strong></span>
@@ -38,6 +39,12 @@
 
     <!-- Content area -->
     <div class="p-4">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
             <!-- Dashboard overview (default) -->
             <div id="section-dashboard" class="dashboard-section">
                 @include('dashboard.sections.overview')
@@ -70,7 +77,19 @@
 
             <!-- Payments -->
             <div id="section-payments" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.payments')
+                @php
+                    $user = auth()->user();
+                    $pendingBookings = \App\Models\Booking::where('user_id', $user->id)
+                        ->where('status', 'confirmed')
+                        ->whereDoesntHave('paymentItems')
+                        ->get();
+                    
+                    $flightTotal = $pendingBookings->where('type', 'flight')->sum('amount');
+                    $hotelTotal = $pendingBookings->where('type', 'hotel')->sum('amount');
+                    $tourTotal = $pendingBookings->where('type', 'tour')->sum('amount');
+                    $grandTotal = $flightTotal + $hotelTotal + $tourTotal;
+                @endphp
+                @include('dashboard.sections.payments', compact('pendingBookings', 'flightTotal', 'hotelTotal', 'tourTotal', 'grandTotal'))
             </div>
         </div>
     </div>
