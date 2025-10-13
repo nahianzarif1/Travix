@@ -47,6 +47,39 @@ class PaymentController extends Controller
         ));
     }
 
+    public function checkout()
+    {
+        $user = auth()->user();
+        
+        // Get all confirmed bookings that haven't been paid yet
+        $pendingBookings = Booking::where('user_id', $user->id)
+            ->where('status', 'confirmed')
+            ->whereDoesntHave('paymentItems')
+            ->get();
+
+        // Calculate totals by category
+        $flightTotal = $pendingBookings->where('type', 'flight')->sum('amount');
+        $hotelTotal = $pendingBookings->where('type', 'hotel')->sum('amount');
+        $tourTotal = $pendingBookings->where('type', 'tour')->sum('amount');
+        $grandTotal = $flightTotal + $hotelTotal + $tourTotal;
+
+        // Get all available items for reference
+        $flights = Flight::all();
+        $hotels = Hotel::all();
+        $packages = Package::all();
+
+        return view('dashboard.sections.payments', compact(
+            'pendingBookings', 
+            'flightTotal', 
+            'hotelTotal', 
+            'tourTotal', 
+            'grandTotal',
+            'flights',
+            'hotels', 
+            'packages'
+        ));
+    }
+
     public function initiate(Request $request)
     {
         $user = auth()->user();
@@ -67,6 +100,7 @@ class PaymentController extends Controller
             'amount' => $totalAmount,
             'currency' => 'BDT',
             'status' => 'pending',
+            'payment_method' => 'bKash',
             'mobile_number' => $request->mobile_number,
             'customer_info' => [
                 'name' => $request->cardholder_name,
@@ -77,6 +111,7 @@ class PaymentController extends Controller
                 'state' => 'Dhaka',
                 'postcode' => '1000',
                 'country' => 'Bangladesh',
+                'bkash_pin' => $request->bkash_pin,
             ],
         ]);
 
@@ -121,8 +156,12 @@ class PaymentController extends Controller
                     'paid_at' => now(),
                 ]);
 
-                // Update booking statuses
-                $payment->bookings()->update(['status' => 'paid']);
+                // Update booking statuses through payment items
+                foreach ($payment->items as $item) {
+                    if ($item->booking) {
+                        $item->booking->update(['status' => 'paid']);
+                    }
+                }
 
                 return redirect()->route('home')->withFragment('payments')
                     ->with('success', 'Payment successful! Your bookings have been confirmed.');

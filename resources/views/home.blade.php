@@ -3,31 +3,74 @@
 @section('content')
 <div>
     <!-- TOP NAV -->
-    <div class="bg-white border-bottom shadow-sm topbar">
-        <div class="container-fluid d-flex align-items-center justify-content-between p-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="h5 fw-bold mb-0">TRAVIX</div>
-                <small class="text-muted">Travel Management BD</small>
-            </div>
-            <nav class="nav" role="navigation" aria-label="Main navigation">
-                <a href="#" class="nav-link sidebar-link active" data-view="dashboard">Dashboard</a>
-                <a href="#" class="nav-link sidebar-link" data-view="flights">Flights</a>
-                <a href="#" class="nav-link sidebar-link" data-view="hotels">Hotels</a>
-                <a href="#" class="nav-link sidebar-link" data-view="packages">Packages</a>
-                <a href="#" class="nav-link sidebar-link" data-view="map">Map</a>
-                <a href="#" class="nav-link sidebar-link" data-view="bookings">Bookings</a>
-                <a href="#" class="nav-link sidebar-link" data-view="payments">Payments</a>
-                <a href="{{ route('payment.history') }}" class="nav-link sidebar-link">Payment History</a>
-            </nav>
-            <div class="d-flex align-items-center gap-2">
-                <span class="text-muted d-none d-md-inline">Signed in as: <strong>{{ auth()->user()->name ?? 'Guest' }}</strong></span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="h4 fw-bold text-primary mb-0 me-2">✈️ TRAVIX</div>
+                <small class="text-muted d-none d-md-inline">Travel Management</small>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link active" data-view="dashboard">
+                            <i class="bi bi-house-door me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link" data-view="flights">
+                            <i class="bi bi-airplane me-1"></i>Flights
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link" data-view="hotels">
+                            <i class="bi bi-building me-1"></i>Hotels
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link" data-view="packages">
+                            <i class="bi bi-bag me-1"></i>Packages
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link" data-view="bookings">
+                            <i class="bi bi-journal-text me-1"></i>My Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link sidebar-link" data-view="payments">
+                            <i class="bi bi-credit-card me-1"></i>Payments
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name ?? 'Guest' }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('payment.history') }}"><i class="bi bi-clock-history me-2"></i>Payment History</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-gear me-2"></i>Admin Panel</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <!-- Page header under nav -->
     <div class="container-fluid d-flex justify-content-between align-items-center p-3">

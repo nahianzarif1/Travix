@@ -53,6 +53,9 @@ class SSLCommerzService
             'product_category' => 'Travel',
             'product_profile' => 'general',
             'value_a' => $payment->id,
+            // bKash specific parameters
+            'multi_card_name' => 'bkash',
+            'allowed_bin' => 'bkash',
         ];
 
         $response = Http::asForm()->post($this->apiUrl, $data);

@@ -76,10 +76,9 @@
         <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <div>
-                    <h6 class="mb-0">Available Flights</h6>
-                    <small class="text-muted">4 flights found • Dhaka to Cox's Bazar</small>
+                    <h6 class="mb-0 fw-bold">Available Flights</h6>
+                    <small class="text-muted">{{ $flights->count() }} flights found</small>
                 </div>
-                <button class="btn btn-sm btn-light">Filter</button>
             </div>
 
             <div class="vstack gap-3">
@@ -117,8 +116,11 @@
                             <form method="POST" action="{{ route('bookings.flight') }}" class="d-inline">
                                 @csrf
                                 <input type="hidden" name="flight_id" value="{{ $flight->id }}">
-                                <input type="hidden" name="passengers" value="1">
-                                <button type="submit" class="btn btn-success btn-sm">Book Flight</button>
+                                <input type="hidden" name="passengers" value="{{ request('passengers', 1) }}">
+                                <input type="hidden" name="date" value="{{ request('departure', now()->addDays(7)->format('Y-m-d')) }}">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-airplane me-1"></i>Book Now
+                                </button>
                             </form>
                         </div>
                     </div>

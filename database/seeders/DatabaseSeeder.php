@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call([
+            CitiesTableSeeder::class,
+            AirlinesTableSeeder::class,
             PackagesTableSeeder::class,
             FlightsTableSeeder::class,
             HotelsTableSeeder::class,

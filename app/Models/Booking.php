@@ -10,11 +10,15 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','type','reference','status','details','amount'
+        'user_id','type','reference','status','details','amount','booking_date','travel_date','check_in_date','check_out_date'
     ];
 
     protected $casts = [
         'details' => 'array',
+        'booking_date' => 'date',
+        'travel_date' => 'date',
+        'check_in_date' => 'date',
+        'check_out_date' => 'date',
     ];
 
     public function user()

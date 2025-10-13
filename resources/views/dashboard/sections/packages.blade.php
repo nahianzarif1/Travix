@@ -79,9 +79,8 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
                     <h6 class="mb-0 fw-semibold">All Packages</h6>
-                    <small class="text-muted">6 packages available</small>
+                    <small class="text-muted">{{ $packages->count() }} packages available</small>
                 </div>
-                <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-filter me-1"></i> Filter</button>
             </div>
 
             <div class="row g-4">
@@ -126,8 +125,12 @@
                                 <form method="POST" action="{{ route('bookings.package') }}" class="d-inline">
                                     @csrf
                                     <input type="hidden" name="package_id" value="{{ $pkg->id }}">
-                                    <input type="hidden" name="participants" value="2">
-                                    <button type="submit" class="btn btn-success btn-sm">Book</button>
+                                    <input type="hidden" name="participants" value="{{ request('participants', 2) }}">
+                                    <input type="hidden" name="start_date" value="{{ request('start_date', now()->addDays(14)->format('Y-m-d')) }}">
+                                    <input type="hidden" name="end_date" value="{{ request('end_date', now()->addDays(17)->format('Y-m-d')) }}">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-bag me-1"></i>Book
+                                    </button>
                                 </form>
                             </div>
                         </div>

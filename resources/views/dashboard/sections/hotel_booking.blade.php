@@ -49,7 +49,6 @@
                     <h6 class="mb-0 fw-bold">Featured Hotels</h6>
                     <small class="text-muted">Top-rated accommodations across Bangladesh</small>
                 </div>
-                <button class="btn btn-light btn-sm"><i class="bi bi-funnel"></i> Filter</button>
             </div>
             <div class="vstack gap-4">
                 @php
@@ -91,9 +90,13 @@
                                     <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
-                                        <input type="hidden" name="guests" value="2">
+                                        <input type="hidden" name="guests" value="{{ request('guests', 2) }}">
                                         <input type="hidden" name="rooms" value="1">
-                                        <button type="submit" class="btn btn-success btn-sm">Book Now</button>
+                                        <input type="hidden" name="check_in" value="{{ request('check_in', now()->addDays(7)->format('Y-m-d')) }}">
+                                        <input type="hidden" name="check_out" value="{{ request('check_out', now()->addDays(9)->format('Y-m-d')) }}">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-building me-1"></i>Book Now
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -127,9 +130,13 @@
                                     <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
-                                        <input type="hidden" name="guests" value="2">
+                                        <input type="hidden" name="guests" value="{{ request('guests', 2) }}">
                                         <input type="hidden" name="rooms" value="1">
-                                        <button type="submit" class="btn btn-sm btn-success">Book</button>
+                                        <input type="hidden" name="check_in" value="{{ request('check_in', now()->addDays(7)->format('Y-m-d')) }}">
+                                        <input type="hidden" name="check_out" value="{{ request('check_out', now()->addDays(9)->format('Y-m-d')) }}">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-building me-1"></i>Book
+                                        </button>
                                     </form>
                                 </div>
                             </div>

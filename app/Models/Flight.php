@@ -18,5 +18,26 @@ class Flight extends Model
         'amenities' => 'array',
         'departure' => 'datetime:H:i',
         'arrival' => 'datetime:H:i',
+        'is_active' => 'boolean',
     ];
+
+    public function airline()
+    {
+        return $this->belongsTo(Airline::class);
+    }
+
+    public function fromCity()
+    {
+        return $this->belongsTo(City::class, 'from_city_id');
+    }
+
+    public function toCity()
+    {
+        return $this->belongsTo(City::class, 'to_city_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'flight_id');
+    }
 }

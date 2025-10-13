@@ -20,6 +20,49 @@
                     @endif
 
                     @if($pendingBookings->count() > 0)
+                        <!-- Booking Management Section -->
+                        <div class="card border-0 shadow-3d mb-4">
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold mb-3">📋 Selected Bookings</h6>
+                                <div class="row g-3">
+                                    @foreach($pendingBookings as $booking)
+                                        <div class="col-md-6">
+                                            <div class="border rounded-3 p-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="fw-semibold mb-1">
+                                                            @if($booking->type === 'flight')
+                                                                ✈️ {{ $booking->details['airline'] }}
+                                                            @elseif($booking->type === 'hotel')
+                                                                🏨 {{ $booking->details['hotel'] }}
+                                                            @else
+                                                                🎒 {{ $booking->details['tour'] }}
+                                                            @endif
+                                                        </h6>
+                                                        <small class="text-muted">
+                                                            @if($booking->type === 'flight')
+                                                                {{ $booking->details['from'] ?? 'N/A' }} → {{ $booking->details['to'] ?? 'N/A' }}
+                                                            @elseif($booking->type === 'hotel')
+                                                                {{ $booking->details['location'] ?? $booking->details['hotel'] ?? 'N/A' }}
+                                                            @else
+                                                                {{ $booking->details['location'] ?? $booking->details['tour'] ?? 'N/A' }}
+                                                            @endif
+                                                        </small>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <div class="fw-bold text-success">৳{{ number_format($booking->amount) }}</div>
+                        <button class="btn btn-outline-danger btn-sm" onclick="removeBooking({{ $booking->id }})" title="Remove booking">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
                         <form method="POST" action="{{ route('payment.initiate') }}" id="paymentForm">
                             @csrf
                             <div class="row g-3">
@@ -28,37 +71,17 @@
                                     <input type="text" name="cardholder_name" class="form-control form-control-soft" placeholder="John Doe" value="{{ $user->name }}" required>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Card Number</label>
+                                    <label class="form-label">bKash Mobile Number</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-soft">💳</span>
-                                        <input type="text" name="card_number" class="form-control form-control-soft" placeholder="1234 5678 9012 3456" required>
+                                        <span class="input-group-text bg-soft">📱</span>
+                                        <input type="tel" name="mobile_number" class="form-control form-control-soft" placeholder="01XXXXXXXXX" value="{{ $user->mobile_number ?? '' }}" required>
                                     </div>
+                                    <small class="text-muted">Enter your bKash registered mobile number</small>
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label">Expiry Month</label>
-                                    <select name="expiry_month" class="form-select form-control-soft" required>
-                                        <option value="">Month</option>
-                                        @for($i = 1; $i <= 12; $i++)
-                                            <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Expiry Year</label>
-                                    <select name="expiry_year" class="form-select form-control-soft" required>
-                                        <option value="">Year</option>
-                                        @for($i = date('Y'); $i <= date('Y') + 10; $i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">CVC</label>
-                                    <input type="password" name="cvv" class="form-control form-control-soft" placeholder="***" required>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Mobile Number</label>
-                                    <input type="tel" name="mobile_number" class="form-control form-control-soft" placeholder="+880 1XXX XXXXXX" value="{{ $user->mobile_number ?? '' }}" required>
+                                <div class="col-12">
+                                    <label class="form-label">bKash PIN</label>
+                                    <input type="password" name="bkash_pin" class="form-control form-control-soft" placeholder="Enter your bKash PIN" required>
+                                    <small class="text-muted">You will be redirected to bKash for PIN verification</small>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Billing Address</label>
@@ -68,12 +91,12 @@
 
                             <div class="d-flex align-items-center justify-content-between mt-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="saveCard" name="save_card">
-                                    <label class="form-check-label" for="saveCard">Save card for future payments</label>
+                                    <input class="form-check-input" type="checkbox" id="savePayment" name="save_payment">
+                                    <label class="form-check-label" for="savePayment">Save payment method for future use</label>
                                 </div>
-                                <button type="submit" class="btn btn-success btn-3d">
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="bi bi-credit-card me-2"></i>
-                                    Pay ৳{{ number_format($grandTotal) }} Now
+                                    Pay with bKash ৳{{ number_format($grandTotal + ($grandTotal * 0.02)) }}
                                 </button>
                             </div>
                         </form>
@@ -138,10 +161,8 @@
                     @endif
 
                     <div class="d-flex gap-2 mt-3">
-                        <span class="badge bg-soft">Visa</span>
-                        <span class="badge bg-soft">Mastercard</span>
-                        <span class="badge bg-soft">bKash</span>
-                        <span class="badge bg-soft">Rocket</span>
+                        <span class="badge bg-success">bKash</span>
+                        <span class="text-muted small">Secure Mobile Payment</span>
                     </div>
                 </div>
             </div>
@@ -155,4 +176,31 @@
         </div>
     </div>
 </div>
+
+<script>
+function removeBooking(bookingId) {
+    if (confirm('Are you sure you want to remove this booking?')) {
+        // Send AJAX request to remove booking
+        fetch(`/bookings/${bookingId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error removing booking: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error removing booking');
+        });
+    }
+}
+</script>
 
