@@ -37,6 +37,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+        <a href="#" class="nav-link sidebar-link" data-view="map">
+            <i class="bi bi-geo-alt me-1"></i>Map
+        </a>
+    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link sidebar-link" data-view="bookings">
                             <i class="bi bi-journal-text me-1"></i>My Bookings
                         </a>
