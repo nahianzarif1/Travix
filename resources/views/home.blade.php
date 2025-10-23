@@ -6,7 +6,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <div class="h4 fw-bold text-primary mb-0 me-2">✈️ TRAVIX</div>
+                <div class="h4 fw-bold mb-0 me-2">TRAVIX</div>
                 <small class="text-muted d-none d-md-inline">Travel Management</small>
             </a>
             
@@ -37,10 +37,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-        <a href="#" class="nav-link sidebar-link" data-view="map">
-            <i class="bi bi-geo-alt me-1"></i>Map
-        </a>
-    </li>
+                        <a href="#" class="nav-link sidebar-link" data-view="map">
+                            <i class="bi bi-geo-alt me-1"></i>Map
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link sidebar-link" data-view="bookings">
                             <i class="bi bi-journal-text me-1"></i>My Bookings
@@ -53,12 +53,14 @@
                     </li>
                 </ul>
                 
+                <!-- ✅ Fixed and styled dropdown button -->
                 <div class="d-flex align-items-center gap-3">
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name ?? 'Guest' }}
+                        <button class="btn btn-success dropdown-toggle d-flex align-items-center gap-2" 
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> {{ auth()->user()->name ?? 'Guest' }}
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('payment.history') }}"><i class="bi bi-clock-history me-2"></i>Payment History</a></li>
                             <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-gear me-2"></i>Admin Panel</a></li>
                             <li><hr class="dropdown-divider"></li>
@@ -93,57 +95,75 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-            <!-- Dashboard overview (default) -->
-            <div id="section-dashboard" class="dashboard-section">
-                @include('dashboard.sections.overview')
-            </div>
+        
+        <!-- Dashboard overview (default) -->
+        <div id="section-dashboard" class="dashboard-section">
+            @include('dashboard.sections.overview')
+        </div>
 
-            <!-- Flight booking -->
-            <div id="section-flights" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.flight_booking')
-            </div>
+        <!-- Flight booking -->
+        <div id="section-flights" class="dashboard-section" style="display:none;">
+            @include('dashboard.sections.flight_booking')
+        </div>
 
-            <!-- Hotel booking -->
-            <div id="section-hotels" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.hotel_booking')
-            </div>
+        <!-- Hotel booking -->
+        <div id="section-hotels" class="dashboard-section" style="display:none;">
+            @include('dashboard.sections.hotel_booking')
+        </div>
 
-            <!-- Tour packages -->
-            <div id="section-packages" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.packages')
-            </div>
+        <!-- Tour packages -->
+        <div id="section-packages" class="dashboard-section" style="display:none;">
+            @include('dashboard.sections.packages')
+        </div>
 
-            <!-- Map -->
-            <div id="section-map" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.map')
-            </div>
+        <!-- Map -->
+        <div id="section-map" class="dashboard-section" style="display:none;">
+            @include('dashboard.sections.map')
+        </div>
 
-            <!-- My bookings -->
-            <div id="section-bookings" class="dashboard-section" style="display:none;">
-                @include('dashboard.sections.bookings')
-            </div>
+        <!-- My bookings -->
+        <div id="section-bookings" class="dashboard-section" style="display:none;">
+            @include('dashboard.sections.bookings')
+        </div>
 
-            <!-- Payments -->
-            <div id="section-payments" class="dashboard-section" style="display:none;">
-                @php
-                    $user = auth()->user();
-                    $pendingBookings = \App\Models\Booking::where('user_id', $user->id)
-                        ->where('status', 'confirmed')
-                        ->whereDoesntHave('paymentItems')
-                        ->get();
-                    
-                    $flightTotal = $pendingBookings->where('type', 'flight')->sum('amount');
-                    $hotelTotal = $pendingBookings->where('type', 'hotel')->sum('amount');
-                    $tourTotal = $pendingBookings->where('type', 'tour')->sum('amount');
-                    $grandTotal = $flightTotal + $hotelTotal + $tourTotal;
-                @endphp
-                @include('dashboard.sections.payments', compact('pendingBookings', 'flightTotal', 'hotelTotal', 'tourTotal', 'grandTotal'))
-            </div>
+        <!-- Payments -->
+        <div id="section-payments" class="dashboard-section" style="display:none;">
+            @php
+                $user = auth()->user();
+                $pendingBookings = \App\Models\Booking::where('user_id', $user->id)
+                    ->where('status', 'confirmed')
+                    ->whereDoesntHave('paymentItems')
+                    ->get();
+                
+                $flightTotal = $pendingBookings->where('type', 'flight')->sum('amount');
+                $hotelTotal = $pendingBookings->where('type', 'hotel')->sum('amount');
+                $tourTotal = $pendingBookings->where('type', 'tour')->sum('amount');
+                $grandTotal = $flightTotal + $hotelTotal + $tourTotal;
+            @endphp
+            @include('dashboard.sections.payments', compact('pendingBookings', 'flightTotal', 'hotelTotal', 'tourTotal', 'grandTotal'))
         </div>
     </div>
 </div>
 
-<!-- Inline JS to switch views (client-side, like your React activeView logic) -->
+<!-- ✅ Custom CSS for the green dropdown button -->
+<style>
+.btn-success.dropdown-toggle {
+    background-color: #198754 !important;
+    color: #ffffff !important;
+    border-color: #198754 !important;
+    font-weight: 500;
+    border-radius: 25px;
+    padding: 8px 16px;
+}
+
+.btn-success.dropdown-toggle:hover,
+.btn-success.dropdown-toggle:focus {
+    background-color: #157347 !important;
+    color: #ffffff !important;
+}
+</style>
+
+<!-- Inline JS to switch views -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('.sidebar-link');
@@ -162,18 +182,17 @@ document.addEventListener('DOMContentLoaded', function () {
             s.style.display = (s.id === 'section-' + view) ? 'block' : 'none';
         });
 
-        // update title (human readable)
+        // update title
         const pretty = view === 'dashboard' ? 'Dashboard' : view.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
         titleEl.innerText = pretty;
 
-        // update url hash for bookmarking/back
+        // update url hash
         history.replaceState(null, '', '#' + view);
 
-        // notify sections about view changes (needed for Leaflet sizing)
+        // handle map resizing
         try {
             window.dispatchEvent(new CustomEvent('travix:view', { detail: { view } }));
             if (view === 'map') {
-                // defer to allow layout to paint before sizing map
                 setTimeout(() => window.dispatchEvent(new Event('travix:map:show')), 50);
             }
         } catch (e) {}
@@ -188,11 +207,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // initialize from hash or dashboard default
+    // initialize
     const initial = location.hash ? location.hash.replace('#','') : 'dashboard';
     setActive(initial);
 });
 </script>
 @endsection
-
-

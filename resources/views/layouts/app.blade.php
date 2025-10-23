@@ -17,86 +17,87 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary-1: #0b74ff;
-            --primary-2: #00b4ff;
-            --primary-3: #003973;
-            --surface-1: #ffffff;
-            --surface-2: #f6f9ff;
-            --shadow-color: 12, 38, 80;
-            --glass: #ffffff40;
-        }
+    :root {
+        --primary-1: #0b74ff;
+        --primary-2: #00b4ff;
+        --primary-3: #003973;
+        --surface-1: #ffffff;
+        --surface-2: #f6f9ff;
+        --shadow-color: 12, 38, 80;
+        --glass: #ffffff40;
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(1200px 600px at -10% -10%, #eaf3ff 0%, transparent 40%),
-                        radial-gradient(1000px 500px at 110% 10%, #e6fbff 0%, transparent 40%),
-                        linear-gradient(180deg, #f7fbff, #eef7ff);
-            min-height: 100vh;
-        }
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: radial-gradient(1200px 600px at -10% -10%, #eaf3ff 0%, transparent 40%),
+                    radial-gradient(1000px 500px at 110% 10%, #e6fbff 0%, transparent 40%),
+                    linear-gradient(180deg, #f7fbff, #eef7ff);
+        min-height: 100vh;
+    }
 
-        .navbar {
-            background: linear-gradient(90deg, var(--primary-3), var(--primary-1), var(--primary-2));
-            box-shadow: 0 10px 25px rgba(var(--shadow-color), .18);
-        }
+    /* ✅ Navbar customization */
+    .navbar {
+        background-color: #198754 !important; /* solid green background */
+        box-shadow: 0 10px 25px rgba(var(--shadow-color), .18);
+    }
 
-        .navbar .navbar-brand,
-        .navbar .nav-link {
-            color: #fff !important;
-            font-weight: 600;
-        }
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+        color: #fff !important; /* white text */
+        font-weight: 600;
+    }
 
-        .navbar-toggler {
-            border: none;
-        }
+    .navbar-toggler {
+        border: none;
+    }
 
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.9%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.9%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
 
-        .card {
-            border-radius: 1rem;
-            border: 1px solid #e9eef9;
-            box-shadow: 0 18px 45px rgba(var(--shadow-color), .12), inset 0 1px 0 rgba(255, 255, 255, .8);
-            background: linear-gradient(180deg, #ffffff, #fbfdff);
-        }
+    .card {
+        border-radius: 1rem;
+        border: 1px solid #e9eef9;
+        box-shadow: 0 18px 45px rgba(var(--shadow-color), .12), inset 0 1px 0 rgba(255, 255, 255, .8);
+        background: linear-gradient(180deg, #ffffff, #fbfdff);
+    }
 
-        .btn-primary {
-            background: linear-gradient(180deg, var(--primary-1), #0862da);
-            border: 0;
-            border-radius: 30px;
-            padding: 10px 22px;
-            box-shadow: 0 8px 20px rgba(11, 116, 255, .35), inset 0 1px 0 rgba(255, 255, 255, .5);
-        }
+    .btn-primary {
+        background: linear-gradient(180deg, var(--primary-1), #0862da);
+        border: 0;
+        border-radius: 30px;
+        padding: 10px 22px;
+        box-shadow: 0 8px 20px rgba(11, 116, 255, .35), inset 0 1px 0 rgba(255, 255, 255, .5);
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.02);
-            box-shadow: 0 10px 24px rgba(11, 116, 255, .42), inset 0 1px 0 rgba(255, 255, 255, .6);
-        }
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.02);
+        box-shadow: 0 10px 24px rgba(11, 116, 255, .42), inset 0 1px 0 rgba(255, 255, 255, .6);
+    }
 
-        .dropdown-menu {
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(var(--shadow-color), .15);
-        }
+    .dropdown-menu {
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(var(--shadow-color), .15);
+    }
 
-        /* ✅ Fix dropdown overflow issue */
+    .navbar .dropdown-menu {
+        right: 0 !important;
+        left: auto !important;
+        transform: none !important;
+        margin-top: 10px;
+        position: absolute !important;
+        z-index: 1050;
+    }
+
+    @media (max-width: 992px) {
         .navbar .dropdown-menu {
-            right: 0 !important;
+            right: 10px !important;
             left: auto !important;
-            transform: none !important;
-            margin-top: 10px;
-            position: absolute !important;
-            z-index: 1050;
         }
+    }
+</style>
 
-        @media (max-width: 992px) {
-            .navbar .dropdown-menu {
-                right: 10px !important;
-                left: auto !important;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -152,7 +153,7 @@
         </nav>
     @endif
 
-    <main class="py-4">
+    <main class>
         @yield('content')
     </main>
 

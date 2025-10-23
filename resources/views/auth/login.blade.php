@@ -21,7 +21,7 @@ body, html {
 
 /* Login card */
 .login-card {
-    background-color: rgba(255, 255, 255, 0.95); /* light semi-transparent card */
+    background-color: rgba(255, 255, 255, 0.75); /* light semi-transparent card */
     border-radius: 15px;
     padding: 40px;
     max-width: 400px;
@@ -52,13 +52,13 @@ body, html {
 }
 
 .login-card .form-control:focus {
-    border-color: #0b74ff;
-    box-shadow: 0 0 5px rgba(11, 116, 255, 0.5);
+    border-color: #198754;
+    box-shadow: 0 0 5px rgba(17, 185, 135, 0.6);
 }
 
 /* Button */
 .btn-login {
-    background-color: #0b74ff;
+    background-color: #198754;
     color: #fff;
     font-size: 1.1rem;
     font-weight: 600;
@@ -68,17 +68,17 @@ body, html {
 }
 
 .btn-login:hover {
-    background-color: #00b4ff;
+    background-color: #198754;
 }
 
 /* Links */
 .login-card a {
-    color: #0b74ff;
+    color: #198754;
     font-weight: 500;
 }
 
 .login-card a:hover {
-    color: #0077cc;
+    color: #198754;
 }
 
 /* Error alert */
