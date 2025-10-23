@@ -34,6 +34,31 @@
                     linear-gradient(180deg, #f7fbff, #eef7ff);
         min-height: 100vh;
     }
+    /* ================= Custom 3D Button for Search Flight ================= */
+.btn-3d {
+    border-radius: 30px;
+    padding: 12px 28px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.btn-custom {
+    background-color: #198754; /* green color */
+    color: #fff; /* white text */
+}
+
+.btn-custom:hover {
+    background-color: #157347; /* darker green on hover */
+    color: #fff;
+}
+
 
     /* ✅ Navbar customization */
     .navbar {

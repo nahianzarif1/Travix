@@ -4,18 +4,7 @@
         <p class="text-muted">Discover Bangladesh with our carefully curated tour packages</p>
     </div>
 
-    <div class="card border-0 shadow-3d mb-4">
-        <div class="card-body pt-3">
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-                @php
-                    $categories = ['All Packages','Beach Tours','Wildlife Safari','Nature Tours','Adventure','Cultural Tours'];
-                @endphp
-                @foreach($categories as $category)
-                    <button class="btn btn-outline-success btn-sm">{{ $category }}</button>
-                @endforeach
-            </div>
-        </div>
-    </div>
+
 
     <div class="card border-0 shadow-3d mb-4">
         <div class="card-body p-4">
@@ -32,7 +21,7 @@
                             <div class="flex-grow-1">
                                 <div class="fw-semibold mb-1">Cox's Bazar Beach Paradise</div>
                                 <div class="text-muted small d-flex align-items-center gap-2 mb-1"><i class="bi bi-geo-alt"></i> Cox's Bazar <i class="bi bi-clock ms-2"></i> 3 Days 2 Nights</div>
-                                <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-star-fill text-warning"></i> 4.7 <span class="text-muted small">(245 reviews)</span> <span class="badge bg-light text-dark ms-auto">Beach</span></div>
+                                
                                 <p class="text-muted small mb-2">Experience the world’s longest natural beach with crystal clear waters and golden sand.</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -56,7 +45,7 @@
                             <div class="flex-grow-1">
                                 <div class="fw-semibold mb-1">Sundarbans Wildlife Safari</div>
                                 <div class="text-muted small d-flex align-items-center gap-2 mb-1"><i class="bi bi-geo-alt"></i> Sundarbans <i class="bi bi-clock ms-2"></i> 4 Days 3 Nights</div>
-                                <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-star-fill text-warning"></i> 4.8 <span class="text-muted small">(189 reviews)</span> <span class="badge bg-light text-dark ms-auto">Wildlife</span></div>
+                               
                                 <p class="text-muted small mb-2">Explore the UNESCO World Heritage mangrove forest and spot the legendary Royal Bengal Tigers.</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -101,7 +90,7 @@
                                 <span class="d-flex align-items-center gap-1"><i class="bi bi-geo-alt"></i> {{ $pkg->location }}</span>
                                 <span class="d-flex align-items-center gap-1"><i class="bi bi-clock"></i> {{ $pkg->duration }}</span>
                             </div>
-                            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-star-fill text-warning"></i> {{ $pkg->rating }} <span class="text-muted small">({{ $pkg->reviews }})</span></div>
+                         
                             <div class="mb-2">
                                 <strong class="small">Highlights:</strong>
                                 @foreach($pkg->highlights as $h)

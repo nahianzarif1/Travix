@@ -107,10 +107,12 @@
                             </div>
                             <h5 class="fw-bold text-muted">No Pending Payments</h5>
                             <p class="text-muted">You don't have any confirmed bookings that require payment.</p>
-                            <a href="{{ route('home') }}#packages" class="btn btn-success btn-3d">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                Book Something New
-                            </a>
+                            <div class="text-center py-4">
+    <i class="bi bi-emoji-smile text-success" style="font-size: 3rem;"></i>
+    <h5 class="fw-bold text-muted mt-2 mb-1">Thank you for your booking!</h5>
+    <p class="text-muted mb-0">Explore more packages to plan your next adventure ✈️🏨🎒</p>
+</div>
+
                         </div>
                     @endif
                 </div>

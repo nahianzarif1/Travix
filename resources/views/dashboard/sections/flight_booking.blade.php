@@ -71,9 +71,10 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3 btn-3d">
-                    <span class="me-1">✈️</span> Search Flights
-                </button>
+                <button type="submit" class="btn btn-custom mt-3 btn-3d">
+    <span class="me-1">✈️</span> Search Flight
+</button>
+
             </form>
         </div>
     </div>

@@ -57,12 +57,8 @@
                     <div class="text-muted small">Total Amount: <span class="fw-semibold text-success">৳{{ number_format($booking->amount) }}</span></div>
                   </div>
                   <div class="col-md-4 d-flex flex-column gap-2">
-                    <button class="btn btn-light btn-sm">Download Ticket</button>
-                    @if($booking->status === 'confirmed')
-                      <button class="btn btn-outline-secondary btn-sm">Modify Booking</button>
-                    @elseif($booking->status === 'pending')
-                      <button class="btn btn-danger btn-sm">Cancel Booking</button>
-                    @endif
+                   
+        
                   </div>
                 </div>
               </div>
@@ -102,8 +98,7 @@
                     <div class="text-muted small">Total Amount: <span class="fw-semibold text-success">৳{{ number_format($booking->amount) }}</span></div>
                   </div>
                   <div class="col-md-3 d-flex flex-column gap-2">
-                    <button class="btn btn-light btn-sm">Download Voucher</button>
-                    <button class="btn btn-outline-secondary btn-sm">Modify Booking</button>
+                   
                   </div>
                 </div>
               </div>
@@ -143,8 +138,7 @@
                     <div class="text-muted small">Total Amount: <span class="fw-semibold text-success">৳{{ number_format($booking->amount) }}</span></div>
                   </div>
                   <div class="col-md-3 d-flex flex-column gap-2">
-                    <button class="btn btn-light btn-sm">Download Voucher</button>
-                    <button class="btn btn-outline-secondary btn-sm">View Itinerary</button>
+                    
                   </div>
                 </div>
               </div>
