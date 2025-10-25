@@ -147,6 +147,7 @@
 
 <!-- ✅ Custom CSS for the green dropdown button -->
 <style>
+/* ===== Dropdown button (user profile) ===== */
 .btn-success.dropdown-toggle {
     background-color: #198754 !important;
     color: #ffffff !important;
@@ -161,7 +162,44 @@
     background-color: #157347 !important;
     color: #ffffff !important;
 }
+
+/* ===== Navbar sidebar buttons ===== */
+.navbar-nav .nav-link {
+    margin-right: 20px; /* spacing between buttons */
+    padding: 8px 12px;
+    font-weight: 500;
+    color: #198754; /* original green color */
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background-color: transparent; /* remove background hover effect */
+}
+
+/* Hover effect - underline only */
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: 0;
+    background-color: #ffffff; /* white underline */
+    transition: width 0.3s;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 100%; /* underline expands on hover or active */
+}
+
+/* Keep text color unchanged on hover */
+.navbar-nav .nav-link:hover {
+    color: #198754; /* keep same green */
+    background-color: transparent; /* no hover bg */
+}
+
 </style>
+
 
 <!-- Inline JS to switch views -->
 <script>

@@ -165,11 +165,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/payment/fail', [PaymentController::class, 'fail'])->name('payment.fail');
     Route::post('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
     Route::post('/payment/ipn', [PaymentController::class, 'ipn'])->name('payment.ipn');
-    Route::get('/payment/history', [PaymentController::class, 'history'])->name('payment.history');
+    Route::get('/payment/history', [PaymentController::class, 'history'])
+    ->name('payment.history')
+    ->middleware('admin');
 });
 
 // Admin routes
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function ()  {
     Route::get('/', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
 
     // Flights

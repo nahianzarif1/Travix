@@ -212,10 +212,16 @@ class PaymentController extends Controller
     public function history()
     {
         $user = auth()->user();
-        $payments = Payment::where('user_id', $user->id)
-            ->with('items.booking')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        if ($user->is_admin) {
+            $payments = Payment::with(['user', 'items.booking'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            $payments = Payment::where('user_id', $user->id)
+                ->with('items.booking')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        }
 
         return view('dashboard.sections.payment_history', compact('payments'));
     }

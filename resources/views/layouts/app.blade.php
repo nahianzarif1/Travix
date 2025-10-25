@@ -153,24 +153,34 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
-                                   id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('home') }}">Dashboard</a></li>
-                                    <li>
-                                        <a class="dropdown-item" href="#"
-                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-                                    </li>
-                                </ul>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
+                            @if (Auth::user()->is_admin)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
+                                       id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('payment.history') }}">Payment History</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+                                </li>
+                            @endif
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         @endguest
                     </ul>
                 </div>

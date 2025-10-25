@@ -11,7 +11,8 @@ class Flight extends Model
 
     protected $fillable = [
         'airline', 'aircraft', 'from_city', 'to_city', 'departure', 'arrival', 
-        'duration', 'price', 'rating', 'amenities'
+        'duration', 'price', 'rating', 'amenities',
+        'airline_id', 'from_city_id', 'to_city_id', 'is_active', 'available_seats'
     ];
 
     protected $casts = [

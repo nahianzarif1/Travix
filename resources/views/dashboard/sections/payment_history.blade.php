@@ -32,6 +32,9 @@
                                         <th>Status</th>
                                         <th>Method</th>
                                         <th>Date</th>
+                                        @if (Auth::user()->is_admin)
+                                            <th>User</th>
+                                        @endif
                                         <th>Bookings</th>
                                         <th>Actions</th>
                                     </tr>
@@ -69,6 +72,9 @@
                                                 <div class="text-muted fs-6">{{ $payment->created_at->format('M d, Y') }}</div>
                                                 <div class="text-muted fs-6">{{ $payment->created_at->format('h:i A') }}</div>
                                             </td>
+                                            @if (Auth::user()->is_admin)
+                                                <td>{{ optional($payment->user)->name ?? '—' }}</td>
+                                            @endif
                                             <td>
                                                 <span class="badge bg-white text-success border border-success rounded-pill fs-6 px-3 py-2">
                                                     {{ $payment->items->count() }} items

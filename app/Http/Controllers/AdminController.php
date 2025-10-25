@@ -56,8 +56,15 @@ class AdminController extends Controller
 
         $data = $request->all();
         if ($request->has('amenities_text')) {
-            $data['amenities'] = array_map('trim', explode(',', $request->amenities_text));
+            $data['amenities'] = array_filter(array_map('trim', explode(',', (string)$request->input('amenities_text'))));
         }
+        // Populate legacy string columns for compatibility
+        $airline = Airline::find($request->airline_id);
+        $fromCity = City::find($request->from_city_id);
+        $toCity = City::find($request->to_city_id);
+        $data['airline'] = $airline?->name ?? ($data['airline'] ?? '');
+        $data['from_city'] = $fromCity?->code ?? $fromCity?->name ?? ($data['from_city'] ?? '');
+        $data['to_city'] = $toCity?->code ?? $toCity?->name ?? ($data['to_city'] ?? '');
         $flight = Flight::create($data);
         
         return redirect()->route('admin.flights')->with('success', 'Flight added successfully!');
@@ -78,15 +85,29 @@ class AdminController extends Controller
             'amenities' => 'nullable|array',
         ]);
 
-        $flight->update($request->all());
+        $data = $request->all();
+        if ($request->has('amenities_text')) {
+            $data['amenities'] = array_filter(array_map('trim', explode(',', (string)$request->input('amenities_text'))));
+        }
+        // Populate legacy string columns for compatibility
+        $airline = Airline::find($request->airline_id);
+        $fromCity = City::find($request->from_city_id);
+        $toCity = City::find($request->to_city_id);
+        $data['airline'] = $airline?->name ?? ($flight->airline ?? '');
+        $data['from_city'] = $fromCity?->code ?? $fromCity?->name ?? ($flight->from_city ?? '');
+        $data['to_city'] = $toCity?->code ?? $toCity?->name ?? ($flight->to_city ?? '');
+
+        $flight->update($data);
         
         return redirect()->route('admin.flights')->with('success', 'Flight updated successfully!');
     }
 
-    public function deleteFlight(Flight $flight)
+    public function deleteFlight(Request $request, Flight $flight)
     {
         $flight->delete();
-        
+        if ($request->expectsJson() || $request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Flight deleted successfully']);
+        }
         return redirect()->route('admin.flights')->with('success', 'Flight deleted successfully!');
     }
 
@@ -113,7 +134,12 @@ class AdminController extends Controller
             'featured' => 'boolean',
         ]);
 
-        Hotel::create($request->all());
+        $data = $request->all();
+        if ($request->has('amenities_text')) {
+            $data['amenities'] = array_filter(array_map('trim', explode(',', (string)$request->input('amenities_text'))));
+        }
+        $data['featured'] = (bool) $request->boolean('featured');
+        Hotel::create($data);
         
         return redirect()->route('admin.hotels')->with('success', 'Hotel added successfully!');
     }
@@ -133,15 +159,22 @@ class AdminController extends Controller
             'featured' => 'boolean',
         ]);
 
-        $hotel->update($request->all());
+        $data = $request->all();
+        if ($request->has('amenities_text')) {
+            $data['amenities'] = array_filter(array_map('trim', explode(',', (string)$request->input('amenities_text'))));
+        }
+        $data['featured'] = (bool) $request->boolean('featured');
+        $hotel->update($data);
         
         return redirect()->route('admin.hotels')->with('success', 'Hotel updated successfully!');
     }
 
-    public function deleteHotel(Hotel $hotel)
+    public function deleteHotel(Request $request, Hotel $hotel)
     {
         $hotel->delete();
-        
+        if ($request->expectsJson() || $request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Hotel deleted successfully']);
+        }
         return redirect()->route('admin.hotels')->with('success', 'Hotel deleted successfully!');
     }
 
@@ -169,7 +202,14 @@ class AdminController extends Controller
             'group_size' => 'nullable|string|max:50',
         ]);
 
-        Package::create($request->all());
+        $data = $request->all();
+        if ($request->has('highlights_text')) {
+            $data['highlights'] = array_filter(array_map('trim', explode('\n', (string)$request->input('highlights_text'))));
+        }
+        if ($request->has('includes_text')) {
+            $data['includes'] = array_filter(array_map('trim', explode('\n', (string)$request->input('includes_text'))));
+        }
+        Package::create($data);
         
         return redirect()->route('admin.packages')->with('success', 'Package added successfully!');
     }
@@ -191,15 +231,24 @@ class AdminController extends Controller
             'group_size' => 'nullable|string|max:50',
         ]);
 
-        $package->update($request->all());
+        $data = $request->all();
+        if ($request->has('highlights_text')) {
+            $data['highlights'] = array_filter(array_map('trim', explode('\n', (string)$request->input('highlights_text'))));
+        }
+        if ($request->has('includes_text')) {
+            $data['includes'] = array_filter(array_map('trim', explode('\n', (string)$request->input('includes_text'))));
+        }
+        $package->update($data);
         
         return redirect()->route('admin.packages')->with('success', 'Package updated successfully!');
     }
 
-    public function deletePackage(Package $package)
+    public function deletePackage(Request $request, Package $package)
     {
         $package->delete();
-        
+        if ($request->expectsJson() || $request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Package deleted successfully']);
+        }
         return redirect()->route('admin.packages')->with('success', 'Package deleted successfully!');
     }
 }

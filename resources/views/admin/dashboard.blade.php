@@ -5,6 +5,11 @@
     <!-- Dashboard Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-success mb-0">📊 Admin Dashboard</h2>
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.flights') }}" class="btn btn-outline-success btn-3d">Manage Flights</a>
+            <a href="{{ route('admin.hotels') }}" class="btn btn-outline-success btn-3d">Manage Hotels</a>
+            <a href="{{ route('admin.packages') }}" class="btn btn-outline-success btn-3d">Manage Packages</a>
+        </div>
     </div>
 
     <!-- Statistics Cards -->
