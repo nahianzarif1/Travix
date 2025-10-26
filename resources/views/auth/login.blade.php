@@ -103,8 +103,9 @@ body, html {
             <button type="submit" class="btn btn-login w-100 mt-2">Login</button>
         </form>
 
-        <div class="mt-3">
-            Don't have an account? <a href="{{ route('register') }}">Register</a>
+        <div class="mt-3 d-flex justify-content-between">
+            <!--<a href="{{ route('password.request') }}">Forgot your password?</a>-->
+            <span>Don't have an account? <a href="{{ route('register') }}">Register</a></span>
         </div>
     </div>
 </div>

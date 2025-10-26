@@ -15,7 +15,7 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto gap-3">
                     <li class="nav-item">
                         <a href="#" class="nav-link sidebar-link active" data-view="dashboard">
                             <i class="bi bi-house-door me-1"></i>Dashboard
@@ -79,16 +79,37 @@
         </div>
     </nav>
 
-    <!-- Page header under nav -->
-    <div class="container-fluid d-flex justify-content-between align-items-center p-3">
-        <div>
-            <h5 id="viewTitle" class="mb-0">Dashboard</h5>
-            <small class="text-muted">Welcome back, {{ auth()->user()->name ?? 'User' }}</small>
+    <!-- Hero slider under nav -->
+    <div id="dashboardHero" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" style="height: 40vh; min-height: 280px;">
+            <div class="carousel-item active" style="background:url('{{ asset('images/dashboard-bg1.jpg') }}') center/cover no-repeat; height:100%;"></div>
+            <div class="carousel-item" style="background:url('{{ asset('images/dashboard-bg2.jpg') }}') center/cover no-repeat; height:100%;"></div>
+            <div class="carousel-item" style="background:url('{{ asset('images/dashboard-bg3.jpg') }}') center/cover no-repeat; height:100%;"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#dashboardHero" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#dashboardHero" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Card-like header under hero -->
+    <div class="container" style="margin-top:-40px;">
+        <div class="card shadow-lg border-0 mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center p-3">
+                <div>
+                    <h5 id="viewTitle" class="mb-0">Dashboard</h5>
+                    <small class="text-muted">Welcome back, {{ auth()->user()->name ?? 'User' }}</small>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Content area -->
-    <div class="p-4">
+    <div class="container pb-4">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

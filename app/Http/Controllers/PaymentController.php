@@ -225,4 +225,38 @@ class PaymentController extends Controller
 
         return view('dashboard.sections.payment_history', compact('payments'));
     }
+
+    public function ipn(Request $request)
+    {
+        $tranId = $request->get('tran_id') ?? $request->get('val_id');
+        $amount = $request->get('amount');
+        $currency = $request->get('currency');
+
+        if (!$tranId) {
+            return response('Invalid IPN', 400);
+        }
+
+        $payment = Payment::where('transaction_id', $tranId)->first();
+        if (!$payment) {
+            return response('Payment not found', 404);
+        }
+
+        if ($payment->status === 'success') {
+            return response('Already processed', 200);
+        }
+
+        $payment->update([
+            'status' => 'success',
+            'sslcommerz_response' => $request->all(),
+            'paid_at' => now(),
+        ]);
+
+        foreach ($payment->items as $item) {
+            if ($item->booking) {
+                $item->booking->update(['status' => 'paid']);
+            }
+        }
+
+        return response('OK', 200);
+    }
 }

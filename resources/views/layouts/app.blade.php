@@ -140,7 +140,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navContent">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto gap-3">
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -191,6 +191,28 @@
     <main class>
         @yield('content')
     </main>
+
+    @if (!Request::routeIs('admin.*') && !Request::routeIs('payment.history'))
+        <footer >
+            <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold">{{ config('app.name', 'Travix') }}</span>
+                    <span class="text-muted"> {{ date('Y') }}</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 small text-muted">
+                    <a href="#" class="text-decoration-none text-muted">About</a>
+                    <a href="#" class="text-decoration-none text-muted">Contact</a>
+                    <a href="#" class="text-decoration-none text-muted">Terms</a>
+                    <a href="#" class="text-decoration-none text-muted">Privacy</a>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-facebook"></i>
+                    <i class="bi bi-twitter-x"></i>
+                    <i class="bi bi-instagram"></i>
+                </div>
+            </div>
+        </footer>
+    @endif
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

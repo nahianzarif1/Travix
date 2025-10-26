@@ -24,6 +24,7 @@ class HomeController extends Controller
         $packages = Package::all();
         $flightSearchResults = session('flight_search_results');
         $hotelSearchResults = session('hotel_search_results');
+        
 
         return view('home', compact('flights', 'hotels', 'packages', 'flightSearchResults', 'hotelSearchResults'));
     }

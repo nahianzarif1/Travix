@@ -143,6 +143,59 @@
             </div>
         </div>
     </div>
+    @else
+    <div class="card border-0 shadow-3d">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <h6 class="mb-0 fw-bold">All Flights</h6>
+                    <small class="text-muted">{{ isset($flights) ? $flights->count() : 0 }} flights available</small>
+                </div>
+            </div>
+            <div class="vstack gap-3">
+                @foreach(($flights ?? []) as $flight)
+                    <div class="border rounded-3 p-3 hover-bg-soft">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center justify-content-center rounded-3" style="width:48px;height:48px;background:#e9f3ff;">✈️</div>
+                                <div>
+                                    <div class="fw-semibold">{{ $flight->airline }}</div>
+                                    <div class="text-muted small">{{ $flight->aircraft }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-4 flex-grow-1 justify-content-center">
+                                <div class="text-center">
+                                    <div class="fw-medium">{{ \Carbon\Carbon::parse($flight->departure)->format('h:i A') }}</div>
+                                    <div class="text-muted small">{{ $flight->from_city }}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-muted small">{{ $flight->duration }}</div>
+                                    <div class="my-1 border-top" style="border-style:dashed !important;"></div>
+                                    <div class="text-muted small">Non-stop</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="fw-medium">{{ \Carbon\Carbon::parse($flight->arrival)->format('h:i A') }}</div>
+                                    <div class="text-muted small">{{ $flight->to_city }}</div>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-5 fw-bold text-success">৳{{ number_format($flight->price) }}</div>
+                                <form method="POST" action="{{ route('bookings.flight') }}" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="flight_id" value="{{ $flight->id }}">
+                                    <input type="hidden" name="passengers" value="1">
+                                    <input type="hidden" name="date" value="{{ now()->format('Y-m-d') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-airplane me-1"></i>Book Now
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
     @endif
 </div>
 

@@ -72,7 +72,6 @@
                                         $checkOutDate = \Carbon\Carbon::parse(old('check_out'));
                                         $nights = $checkInDate->diffInDays($checkOutDate);
                                         $guests = old('guests', 1);
-                                        // Simple price logic: price per night * number of nights. You can add guest/room logic here.
                                         $totalPrice = $hotel->price * $nights;
                                     @endphp
                                     <div class="text-end">
@@ -88,11 +87,12 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="small text-muted d-flex flex-wrap gap-2">
-                                        @foreach(array_slice($hotel->amenities, 0, 5) as $a)
+                                        @php $amen = is_array($hotel->amenities) ? $hotel->amenities : []; @endphp
+                                        @foreach(array_slice($amen, 0, 5) as $a)
                                             <span class="badge bg-light text-dark">{{ $a }}</span>
                                         @endforeach
-                                        @if(count($hotel->amenities) > 5)
-                                            <span class="text-muted small">+{{ count($hotel->amenities) - 5 }} more</span>
+                                        @if(count($amen) > 5)
+                                            <span class="text-muted small">+{{ count($amen) - 5 }} more</span>
                                         @endif
                                     </div>
                                     <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
@@ -114,6 +114,65 @@
                         <p class="text-muted">No hotels found for your search criteria.</p>
                     </div>
                 @endforelse
+            </div>
+        </div>
+    </div>
+    @else
+    <div class="card border-0 shadow-3d">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6 class="mb-0 fw-bold">All Hotels</h6>
+                    <small class="text-muted">{{ isset($hotels) ? $hotels->count() : 0 }} hotels available</small>
+                </div>
+            </div>
+            <div class="vstack gap-4">
+                @foreach(($hotels ?? []) as $hotel)
+                    <div class="border rounded-3 p-3 hover-bg-soft">
+                        <div class="d-flex align-items-start gap-3 flex-wrap">
+                            <div class="position-relative">
+                                <img src="{{ $hotel->image }}" alt="{{ $hotel->name }}" class="rounded-3" style="width:180px;height:120px;object-fit:cover;">
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="fw-semibold mb-0">{{ $hotel->name }}</h6>
+                                        <small class="text-muted d-flex align-items-center gap-2"><i class="bi bi-geo-alt"></i> {{ $hotel->location }} <span class="badge bg-light text-dark">{{ $hotel->category }}</span></small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold fs-5 text-success">৳{{ number_format($hotel->price) }}</div>
+                                        <small class="text-muted">per night</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted small mb-2">{{ $hotel->description }}</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                    <span class="fw-medium">{{ $hotel->rating }}</span>
+                                    <small class="text-muted ms-1">({{ $hotel->reviews }} reviews)</small>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="small text-muted d-flex flex-wrap gap-2">
+                                        @php $amen = is_array($hotel->amenities) ? $hotel->amenities : []; @endphp
+                                        @foreach(array_slice($amen, 0, 5) as $a)
+                                            <span class="badge bg-light text-dark">{{ $a }}</span>
+                                        @endforeach
+                                    </div>
+                                    <form method="POST" action="{{ route('bookings.hotel') }}" class="d-inline">
+                                        @csrf
+                                        <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+                                        <input type="hidden" name="guests" value="2">
+                                        <input type="hidden" name="rooms" value="1">
+                                        <input type="hidden" name="check_in" value="{{ now()->addDays(7)->format('Y-m-d') }}">
+                                        <input type="hidden" name="check_out" value="{{ now()->addDays(9)->format('Y-m-d') }}">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-building me-1"></i>Book Now
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

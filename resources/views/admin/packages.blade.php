@@ -52,7 +52,22 @@
                                 <td><i class="bi bi-star-fill text-warning me-1"></i>{{ $package->rating }}</td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" onclick="editPackage({{ $package->id }})">
+                                        <button class="btn btn-outline-primary"
+                                            data-bs-toggle="modal" data-bs-target="#editPackageModal"
+                                            data-id="{{ $package->id }}"
+                                            data-title="{{ $package->title }}"
+                                            data-image="{{ $package->image }}"
+                                            data-category="{{ $package->category }}"
+                                            data-location="{{ $package->location }}"
+                                            data-duration="{{ $package->duration }}"
+                                            data-price="{{ $package->price }}"
+                                            data-original_price="{{ $package->original_price }}"
+                                            data-rating="{{ $package->rating }}"
+                                            data-reviews="{{ $package->reviews }}"
+                                            data-highlights="{{ is_array($package->highlights) ? implode("\n", $package->highlights) : '' }}"
+                                            data-includes="{{ is_array($package->includes) ? implode("\n", $package->includes) : '' }}"
+                                            data-group_size="{{ $package->group_size }}"
+                                        >
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button class="btn btn-outline-danger" onclick="deletePackage({{ $package->id }})">
@@ -138,11 +153,75 @@
     </div>
 </div>
 
-<script>
-function editPackage(id) {
-    alert('Edit package functionality will be implemented here. Package ID: ' + id);
-}
+<!-- Edit Package Modal -->
+<div class="modal fade" id="editPackageModal" tabindex="-1" aria-labelledby="editPackageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPackageModalLabel">Edit Package</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editPackageForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <input type="text" name="title" id="edit_title" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" name="image" id="edit_image" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Category</label>
+                            <input type="text" name="category" id="edit_category" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" id="edit_location" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Duration</label>
+                            <input type="text" name="duration" id="edit_duration" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Price (৳)</label>
+                            <input type="number" name="price" id="edit_price" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Original Price (৳)</label>
+                            <input type="number" name="original_price" id="edit_original_price" class="form-control" min="0" step="0.01">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Rating</label>
+                            <input type="number" name="rating" id="edit_rating" class="form-control" min="0" max="5" step="0.1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Highlights (one per line)</label>
+                            <textarea name="highlights_text" id="edit_highlights_text" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Includes (one per line)</label>
+                            <textarea name="includes_text" id="edit_includes_text" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Group Size</label>
+                            <input type="text" name="group_size" id="edit_group_size" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<script>
 function deletePackage(id) {
     if (confirm('Are you sure you want to delete this package?')) {
         fetch(`/admin/packages/${id}`, {
@@ -162,6 +241,28 @@ function deletePackage(id) {
         })
         .catch(() => alert('Error deleting package'));
     }
+}
+
+const editPackageModal = document.getElementById('editPackageModal');
+if (editPackageModal) {
+    editPackageModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        if (!button) return;
+        const id = button.getAttribute('data-id');
+        const form = document.getElementById('editPackageForm');
+        form.setAttribute('action', `/admin/packages/${id}`);
+        document.getElementById('edit_title').value = button.getAttribute('data-title') || '';
+        document.getElementById('edit_image').value = button.getAttribute('data-image') || '';
+        document.getElementById('edit_category').value = button.getAttribute('data-category') || '';
+        document.getElementById('edit_location').value = button.getAttribute('data-location') || '';
+        document.getElementById('edit_duration').value = button.getAttribute('data-duration') || '';
+        document.getElementById('edit_price').value = button.getAttribute('data-price') || '';
+        document.getElementById('edit_original_price').value = button.getAttribute('data-original_price') || '';
+        document.getElementById('edit_rating').value = button.getAttribute('data-rating') || '';
+        document.getElementById('edit_highlights_text').value = button.getAttribute('data-highlights') || '';
+        document.getElementById('edit_includes_text').value = button.getAttribute('data-includes') || '';
+        document.getElementById('edit_group_size').value = button.getAttribute('data-group_size') || '';
+    });
 }
 </script>
 @endsection

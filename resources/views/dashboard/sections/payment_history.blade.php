@@ -47,7 +47,7 @@
                                             <td>
                                                 @if($payment->status === 'success')
                                                     <span class="badge bg-success rounded-pill fs-6 px-3 py-2">
-                                                        <i class="bi bi-check-circle me-1"></i>Paid
+                                                        <i class="bi bi-check-circle me-1"></i>Confirmed
                                                     </span>
                                                 @elseif($payment->status === 'failed')
                                                     <span class="badge bg-danger rounded-pill fs-6 px-3 py-2">
@@ -59,7 +59,7 @@
                                                     </span>
                                                 @else
                                                     <span class="badge bg-secondary rounded-pill fs-6 px-3 py-2">
-                                                        <i class="bi bi-clock me-1"></i>Pending
+                                                        <i></i>Success
                                                     </span>
                                                 @endif
                                             </td>
